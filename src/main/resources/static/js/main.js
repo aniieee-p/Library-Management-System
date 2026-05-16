@@ -3,8 +3,10 @@
  * Contains utility functions and common operations
  */
 
-// API Base URL
-const API_BASE_URL = 'http://localhost:8080/api';
+// API Base URL - works in both local and production
+const API_BASE_URL = window.location.hostname === 'localhost' 
+    ? 'http://localhost:8080/api'
+    : `${window.location.origin}/api`;
 
 /**
  * Check if user is authenticated
