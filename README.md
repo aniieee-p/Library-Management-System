@@ -129,4 +129,4 @@ MIT License
 
 ## 👨‍💻 Author
 
-Created for Java Full Stack Engineer interview preparation.
+Full-stack web application built with modern technologies.
