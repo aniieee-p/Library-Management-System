@@ -13,9 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Service class for authentication operations
- */
 @Service
 public class AuthService {
     
@@ -24,20 +21,15 @@ public class AuthService {
     @Autowired
     private UserRepository userRepository;
     
-    /**
-     * Register a new user
-     */
     @Transactional
     public User register(RegisterRequest request) {
         logger.info("Attempting to register user with email: {}", request.getEmail());
         
-        // Check if email already exists
         if (userRepository.existsByEmail(request.getEmail())) {
             logger.error("Registration failed: Email already exists - {}", request.getEmail());
             throw new DuplicateResourceException("Email already registered: " + request.getEmail());
         }
         
-        // Create new user
         User user = new User();
         user.setName(request.getName());
         user.setEmail(request.getEmail());
@@ -50,20 +42,15 @@ public class AuthService {
         return savedUser;
     }
     
-    /**
-     * Login user
-     */
     public User login(LoginRequest request) {
         logger.info("Login attempt for email: {}", request.getEmail());
         
-        // Find user by email
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> {
                     logger.error("Login failed: User not found - {}", request.getEmail());
                     return new InvalidCredentialsException("Invalid email or password");
                 });
         
-        // Verify password
         if (!verifyPassword(request.getPassword(), user.getPassword())) {
             logger.error("Login failed: Invalid password for user - {}", request.getEmail());
             throw new InvalidCredentialsException("Invalid email or password");
@@ -73,16 +60,10 @@ public class AuthService {
         return user;
     }
     
-    /**
-     * Hash password using BCrypt
-     */
     private String hashPassword(String plainPassword) {
         return BCrypt.hashpw(plainPassword, BCrypt.gensalt(10));
     }
     
-    /**
-     * Verify password against hash
-     */
     private boolean verifyPassword(String plainPassword, String hashedPassword) {
         try {
             return BCrypt.checkpw(plainPassword, hashedPassword);

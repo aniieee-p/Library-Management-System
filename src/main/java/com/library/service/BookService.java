@@ -11,9 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-/**
- * Service class for book management operations
- */
 @Service
 public class BookService {
     
@@ -22,31 +19,21 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
     
-    /**
-     * Get all books
-     */
     public List<Book> getAllBooks() {
         logger.info("Fetching all books");
         return bookRepository.findAll();
     }
     
-    /**
-     * Get book by ID
-     */
     public Book getBookById(Long id) {
         logger.info("Fetching book with ID: {}", id);
         return bookRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Book", "id", id));
     }
     
-    /**
-     * Add new book
-     */
     @Transactional
     public Book addBook(Book book) {
         logger.info("Adding new book: {}", book.getTitle());
         
-        // Set available quantity equal to total quantity
         if (book.getAvailableQuantity() == null) {
             book.setAvailableQuantity(book.getQuantity());
         }
@@ -57,9 +44,6 @@ public class BookService {
         return savedBook;
     }
     
-    /**
-     * Update book
-     */
     @Transactional
     public Book updateBook(Long id, Book bookDetails) {
         logger.info("Updating book with ID: {}", id);
@@ -73,7 +57,6 @@ public class BookService {
         book.setPublisher(bookDetails.getPublisher());
         book.setPublishedYear(bookDetails.getPublishedYear());
         
-        // Update quantities
         int difference = bookDetails.getQuantity() - book.getQuantity();
         book.setQuantity(bookDetails.getQuantity());
         book.setAvailableQuantity(book.getAvailableQuantity() + difference);
@@ -84,9 +67,6 @@ public class BookService {
         return updatedBook;
     }
     
-    /**
-     * Delete book
-     */
     @Transactional
     public void deleteBook(Long id) {
         logger.info("Deleting book with ID: {}", id);
@@ -97,25 +77,16 @@ public class BookService {
         logger.info("Book deleted successfully: {}", id);
     }
     
-    /**
-     * Search books by query
-     */
     public List<Book> searchBooks(String query) {
         logger.info("Searching books with query: {}", query);
         return bookRepository.searchBooks(query);
     }
     
-    /**
-     * Get books by category
-     */
     public List<Book> getBooksByCategory(String category) {
         logger.info("Fetching books by category: {}", category);
         return bookRepository.findByCategory(category);
     }
     
-    /**
-     * Get total available books count
-     */
     public Long getTotalAvailableBooks() {
         Long count = bookRepository.countTotalAvailableBooks();
         return count != null ? count : 0L;
