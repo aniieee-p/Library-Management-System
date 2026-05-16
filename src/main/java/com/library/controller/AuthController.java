@@ -11,9 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * REST Controller for authentication operations
- */
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*")
@@ -22,10 +19,6 @@ public class AuthController {
     @Autowired
     private AuthService authService;
     
-    /**
-     * Register a new user
-     * POST /api/auth/register
-     */
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<User>> register(@Valid @RequestBody RegisterRequest request) {
         User user = authService.register(request);
@@ -36,10 +29,6 @@ public class AuthController {
                 .body(ApiResponse.success("User registered successfully", user));
     }
     
-    /**
-     * Login user
-     * POST /api/auth/login
-     */
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<User>> login(@Valid @RequestBody LoginRequest request) {
         User user = authService.login(request);

@@ -3,12 +3,6 @@ package com.library;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/**
- * Main Spring Boot Application class for Library Management System
- * 
- * @author Library Management Team
- * @version 1.0.0
- */
 @SpringBootApplication
 public class LibraryManagementApplication {
     

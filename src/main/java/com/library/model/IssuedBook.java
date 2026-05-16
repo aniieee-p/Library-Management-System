@@ -9,9 +9,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-/**
- * IssuedBook entity representing book issue and return transactions
- */
 @Entity
 @Table(name = "issued_books")
 @Data

@@ -20,9 +20,6 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-/**
- * Service class for book issue and return operations
- */
 @Service
 public class IssueService {
     
@@ -39,9 +36,6 @@ public class IssueService {
     @Autowired
     private UserRepository userRepository;
     
-    /**
-     * Issue a book to a user
-     */
     @Transactional
     public IssuedBook issueBook(Long userId, Long bookId) {
         logger.info("Issuing book {} to user {}", bookId, userId);
@@ -78,9 +72,6 @@ public class IssueService {
         return savedIssuedBook;
     }
     
-    /**
-     * Return a book
-     */
     @Transactional
     public IssuedBook returnBook(Long issueId) {
         logger.info("Returning book with issue ID: {}", issueId);
@@ -116,41 +107,26 @@ public class IssueService {
         return returnedBook;
     }
     
-    /**
-     * Get all issued books
-     */
     public List<IssuedBook> getAllIssuedBooks() {
         logger.info("Fetching all issued books");
         return issuedBookRepository.findAll();
     }
     
-    /**
-     * Get issued books by user ID
-     */
     public List<IssuedBook> getIssuedBooksByUserId(Long userId) {
         logger.info("Fetching issued books for user: {}", userId);
         return issuedBookRepository.findByUserId(userId);
     }
     
-    /**
-     * Get currently issued books (not returned)
-     */
     public List<IssuedBook> getCurrentlyIssuedBooks() {
         logger.info("Fetching currently issued books");
         return issuedBookRepository.findByStatus("ISSUED");
     }
     
-    /**
-     * Get overdue books
-     */
     public List<IssuedBook> getOverdueBooks() {
         logger.info("Fetching overdue books");
         return issuedBookRepository.findOverdueBooks(LocalDate.now());
     }
     
-    /**
-     * Get dashboard statistics
-     */
     public DashboardStats getDashboardStats() {
         logger.info("Fetching dashboard statistics");
         

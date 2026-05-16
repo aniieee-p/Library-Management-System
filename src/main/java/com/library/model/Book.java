@@ -9,9 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-/**
- * Book entity representing library books
- */
 @Entity
 @Table(name = "books")
 @Data

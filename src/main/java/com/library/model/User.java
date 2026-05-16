@@ -9,9 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-/**
- * User entity representing both Admin and regular Users
- */
 @Entity
 @Table(name = "users")
 @Data

@@ -13,17 +13,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Global exception handler for all REST controllers
- */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     
-    /**
-     * Handle ResourceNotFoundException
-     */
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponse<Object>> handleResourceNotFoundException(ResourceNotFoundException ex) {
         logger.error("Resource not found: {}", ex.getMessage());
@@ -32,9 +26,6 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error(ex.getMessage()));
     }
     
-    /**
-     * Handle InvalidCredentialsException
-     */
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<ApiResponse<Object>> handleInvalidCredentialsException(InvalidCredentialsException ex) {
         logger.error("Invalid credentials: {}", ex.getMessage());
@@ -43,9 +34,6 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error(ex.getMessage()));
     }
     
-    /**
-     * Handle BookNotAvailableException
-     */
     @ExceptionHandler(BookNotAvailableException.class)
     public ResponseEntity<ApiResponse<Object>> handleBookNotAvailableException(BookNotAvailableException ex) {
         logger.error("Book not available: {}", ex.getMessage());
@@ -54,9 +42,6 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error(ex.getMessage()));
     }
     
-    /**
-     * Handle DuplicateResourceException
-     */
     @ExceptionHandler(DuplicateResourceException.class)
     public ResponseEntity<ApiResponse<Object>> handleDuplicateResourceException(DuplicateResourceException ex) {
         logger.error("Duplicate resource: {}", ex.getMessage());
@@ -65,9 +50,6 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error(ex.getMessage()));
     }
     
-    /**
-     * Handle validation errors
-     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Map<String, String>>> handleValidationExceptions(
             MethodArgumentNotValidException ex) {
@@ -83,9 +65,6 @@ public class GlobalExceptionHandler {
                 .body(new ApiResponse<>(false, "Validation failed", errors));
     }
     
-    /**
-     * Handle all other exceptions
-     */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Object>> handleGlobalException(Exception ex) {
         logger.error("Unexpected error occurred: ", ex);

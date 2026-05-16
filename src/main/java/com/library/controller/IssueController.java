@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-/**
- * REST Controller for book issue and return operations
- */
 @RestController
 @RequestMapping("/api/issues")
 @CrossOrigin(origins = "*")
@@ -23,10 +20,6 @@ public class IssueController {
     @Autowired
     private IssueService issueService;
     
-    /**
-     * Issue a book to a user
-     * POST /api/issues
-     */
     @PostMapping
     public ResponseEntity<ApiResponse<IssuedBook>> issueBook(@RequestBody Map<String, Long> request) {
         Long userId = request.get("userId");
@@ -38,60 +31,36 @@ public class IssueController {
                 .body(ApiResponse.success("Book issued successfully", issuedBook));
     }
     
-    /**
-     * Return a book
-     * PUT /api/issues/{id}/return
-     */
     @PutMapping("/{id}/return")
     public ResponseEntity<ApiResponse<IssuedBook>> returnBook(@PathVariable Long id) {
         IssuedBook returnedBook = issueService.returnBook(id);
         return ResponseEntity.ok(ApiResponse.success("Book returned successfully", returnedBook));
     }
     
-    /**
-     * Get all issued books (Admin only)
-     * GET /api/issues
-     */
     @GetMapping
     public ResponseEntity<ApiResponse<List<IssuedBook>>> getAllIssuedBooks() {
         List<IssuedBook> issuedBooks = issueService.getAllIssuedBooks();
         return ResponseEntity.ok(ApiResponse.success("Issued books fetched successfully", issuedBooks));
     }
     
-    /**
-     * Get issued books by user ID
-     * GET /api/issues/user/{userId}
-     */
     @GetMapping("/user/{userId}")
     public ResponseEntity<ApiResponse<List<IssuedBook>>> getIssuedBooksByUserId(@PathVariable Long userId) {
         List<IssuedBook> issuedBooks = issueService.getIssuedBooksByUserId(userId);
         return ResponseEntity.ok(ApiResponse.success("User's issued books fetched successfully", issuedBooks));
     }
     
-    /**
-     * Get currently issued books (not returned)
-     * GET /api/issues/current
-     */
     @GetMapping("/current")
     public ResponseEntity<ApiResponse<List<IssuedBook>>> getCurrentlyIssuedBooks() {
         List<IssuedBook> issuedBooks = issueService.getCurrentlyIssuedBooks();
         return ResponseEntity.ok(ApiResponse.success("Currently issued books fetched successfully", issuedBooks));
     }
     
-    /**
-     * Get overdue books
-     * GET /api/issues/overdue
-     */
     @GetMapping("/overdue")
     public ResponseEntity<ApiResponse<List<IssuedBook>>> getOverdueBooks() {
         List<IssuedBook> overdueBooks = issueService.getOverdueBooks();
         return ResponseEntity.ok(ApiResponse.success("Overdue books fetched successfully", overdueBooks));
     }
     
-    /**
-     * Get dashboard statistics
-     * GET /api/dashboard/stats
-     */
     @GetMapping("/dashboard/stats")
     public ResponseEntity<ApiResponse<DashboardStats>> getDashboardStats() {
         DashboardStats stats = issueService.getDashboardStats();
