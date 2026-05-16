@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Smart Library</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-book-reader"></i> Smart Library - Admin
+            </a>
+            <div class="ms-auto">
+                <span class="navbar-text text-white me-3">
+                    <i class="fas fa-user-shield"></i> <span id="adminName"></span>
+                </span>
+                <button class="btn btn-outline-light btn-sm" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-2 d-md-block bg-light sidebar">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" onclick="showSection('dashboard')">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showSection('books')">
+                                <i class="fas fa-book"></i> Books
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showSection('users')">
+                                <i class="fas fa-users"></i> Users
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showSection('issues')">
+                                <i class="fas fa-exchange-alt"></i> Issued Books
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="col-md-10 ms-sm-auto px-md-4">
+                <!-- Dashboard Section -->
+                <div id="dashboard" class="content-section">
+                    <h2 class="mt-4 mb-4">Dashboard Overview</h2>
+                    <div class="row" id="statsCards">
+                        <!-- Stats cards will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Books Section -->
+                <div id="books" class="content-section" style="display:none;">
+                    <h2 class="mt-4 mb-4">Book Management</h2>
+                    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addBookModal">
+                        <i class="fas fa-plus"></i> Add New Book
+                    </button>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Author</th>
+                                    <th>Category</th>
+                                    <th>Quantity</th>
+                                    <th>Available</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="booksTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Users Section -->
+                <div id="users" class="content-section" style="display:none;">
+                    <h2 class="mt-4 mb-4">User Management</h2>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Issues Section -->
+                <div id="issues" class="content-section" style="display:none;">
+                    <h2 class="mt-4 mb-4">Issued Books</h2>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>User</th>
+                                    <th>Book</th>
+                                    <th>Issue Date</th>
+                                    <th>Due Date</th>
+                                    <th>Status</th>
+                                    <th>Fine</th>
+                                </tr>
+                            </thead>
+                            <tbody id="issuesTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Add Book Modal -->
+    <div class="modal fade" id="addBookModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Book</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addBookForm">
+                        <div class="mb-3">
+                            <label class="form-label">Title</label>
+                            <input type="text" class="form-control" id="bookTitle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Author</label>
+                            <input type="text" class="form-control" id="bookAuthor" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Category</label>
+                            <input type="text" class="form-control" id="bookCategory" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Quantity</label>
+                            <input type="number" class="form-control" id="bookQuantity" min="1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">ISBN</label>
+                            <input type="text" class="form-control" id="bookIsbn">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Publisher</label>
+                            <input type="text" class="form-control" id="bookPublisher">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Published Year</label>
+                            <input type="number" class="form-control" id="bookYear">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Book</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/main.js"></script>
+    <script>
+        const API_URL = 'http://localhost:8080/api';
+        let currentUser = null;
+
+        // Check authentication
+        window.onload = function() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || user.role !== 'ADMIN') {
+                window.location.href = '/static/login.html';
+                return;
+            }
+            currentUser = user;
+            document.getElementById('adminName').textContent = user.name;
+            loadDashboard();
+        };
+
+        function logout() {
+            localStorage.removeItem('user');
+            window.location.href = '/static/login.html';
+        }
+
+        function showSection(section) {
+            document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
+            document.getElementById(section).style.display = 'block';
+            
+            if (section === 'dashboard') loadDashboard();
+            else if (section === 'books') loadBooks();
+            else if (section === 'users') loadUsers();
+            else if (section === 'issues') loadIssues();
+        }
+
+        async function loadDashboard() {
+            try {
+                const response = await fetch(`${API_URL}/issues/dashboard/stats`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    const stats = result.data;
+                    document.getElementById('statsCards').innerHTML = `
+                        <div class="col-md-3 mb-4">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body">
+                                    <h5>Total Books</h5>
+                                    <h2>${stats.totalBooks}</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <div class="card bg-success text-white">
+                                <div class="card-body">
+                                    <h5>Available Books</h5>
+                                    <h2>${stats.availableBooks}</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <div class="card bg-warning text-white">
+                                <div class="card-body">
+                                    <h5>Issued Books</h5>
+                                    <h2>${stats.issuedBooks}</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <div class="card bg-info text-white">
+                                <div class="card-body">
+                                    <h5>Total Users</h5>
+                                    <h2>${stats.totalUsers}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+            }
+        }
+
+        async function loadBooks() {
+            try {
+                const response = await fetch(`${API_URL}/books`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    const tbody = document.getElementById('booksTable');
+                    tbody.innerHTML = result.data.map(book => `
+                        <tr>
+                            <td>${book.id}</td>
+                            <td>${book.title}</td>
+                            <td>${book.author}</td>
+                            <td>${book.category}</td>
+                            <td>${book.quantity}</td>
+                            <td>${book.availableQuantity}</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger" onclick="deleteBook(${book.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading books:', error);
+            }
+        }
+
+        async function loadUsers() {
+            try {
+                const response = await fetch(`${API_URL}/users`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    const tbody = document.getElementById('usersTable');
+                    tbody.innerHTML = result.data.map(user => `
+                        <tr>
+                            <td>${user.id}</td>
+                            <td>${user.name}</td>
+                            <td>${user.email}</td>
+                            <td><span class="badge bg-${user.role === 'ADMIN' ? 'danger' : 'primary'}">${user.role}</span></td>
+                            <td>
+                                ${user.role !== 'ADMIN' ? `
+                                    <button class="btn btn-sm btn-danger" onclick="deleteUser(${user.id})">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                ` : ''}
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading users:', error);
+            }
+        }
+
+        async function loadIssues() {
+            try {
+                const response = await fetch(`${API_URL}/issues`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    const tbody = document.getElementById('issuesTable');
+                    tbody.innerHTML = result.data.map(issue => `
+                        <tr>
+                            <td>${issue.id}</td>
+                            <td>${issue.user.name}</td>
+                            <td>${issue.book.title}</td>
+                            <td>${issue.issueDate}</td>
+                            <td>${issue.dueDate}</td>
+                            <td><span class="badge bg-${issue.status === 'ISSUED' ? 'warning' : 'success'}">${issue.status}</span></td>
+                            <td>₹${issue.fine}</td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading issues:', error);
+            }
+        }
+
+        document.getElementById('addBookForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const book = {
+                title: document.getElementById('bookTitle').value,
+                author: document.getElementById('bookAuthor').value,
+                category: document.getElementById('bookCategory').value,
+                quantity: parseInt(document.getElementById('bookQuantity').value),
+                isbn: document.getElementById('bookIsbn').value,
+                publisher: document.getElementById('bookPublisher').value,
+                publishedYear: parseInt(document.getElementById('bookYear').value) || null
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/books`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(book)
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    alert('Book added successfully!');
+                    bootstrap.Modal.getInstance(document.getElementById('addBookModal')).hide();
+                    document.getElementById('addBookForm').reset();
+                    loadBooks();
+                }
+            } catch (error) {
+                console.error('Error adding book:', error);
+                alert('Failed to add book');
+            }
+        });
+
+        async function deleteBook(id) {
+            if (confirm('Are you sure you want to delete this book?')) {
+                try {
+                    const response = await fetch(`${API_URL}/books/${id}`, { method: 'DELETE' });
+                    const result = await response.json();
+                    if (result.success) {
+                        alert('Book deleted successfully!');
+                        loadBooks();
+                    }
+                } catch (error) {
+                    console.error('Error deleting book:', error);
+                }
+            }
+        }
+
+        async function deleteUser(id) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                try {
+                    const response = await fetch(`${API_URL}/users/${id}`, { method: 'DELETE' });
+                    const result = await response.json();
+                    if (result.success) {
+                        alert('User deleted successfully!');
+                        loadUsers();
+                    }
+                } catch (error) {
+                    console.error('Error deleting user:', error);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
