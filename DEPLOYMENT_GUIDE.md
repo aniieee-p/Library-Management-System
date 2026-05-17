@@ -2,10 +2,16 @@
 
 This guide covers deploying your Spring Boot application to production.
 
+## 🚀 Live Deployment
+
+**Production URL:** [https://library-management-system-production-a2c7.up.railway.app/](https://library-management-system-production-a2c7.up.railway.app/)
+
+Deployed on Railway with MySQL database.
+
 ## 📋 Table of Contents
 1. [Local Deployment](#local-deployment)
 2. [Creating Production JAR](#creating-production-jar)
-3. [Cloud Deployment (Render)](#cloud-deployment-render)
+3. [Cloud Deployment (Railway)](#cloud-deployment-railway)
 4. [Database Setup](#database-setup)
 5. [Environment Configuration](#environment-configuration)
 6. [Troubleshooting](#troubleshooting)

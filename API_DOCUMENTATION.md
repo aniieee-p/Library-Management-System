@@ -1,8 +1,15 @@
 # Smart Library Management System - API Documentation
 
-## Base URL
+## Base URLs
+
+**Local Development:**
 ```
 http://localhost:8080/api
+```
+
+**Production (Railway):**
+```
+https://library-management-system-production-a2c7.up.railway.app/api
 ```
 
 ## Response Format

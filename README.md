@@ -2,6 +2,8 @@
 
 A full-stack web application for managing library operations built with Spring Boot and MySQL.
 
+🚀 **Live Demo:** [https://library-management-system-production-a2c7.up.railway.app/](https://library-management-system-production-a2c7.up.railway.app/)
+
 ## Tech Stack
 
 **Backend:** Java 17, Spring Boot, Spring Data JPA, MySQL, Maven  
@@ -53,6 +55,12 @@ mvn spring-boot:run
 ```
 
 5. Open http://localhost:8080
+
+## Live Deployment
+
+**Production URL:** [https://library-management-system-production-a2c7.up.railway.app/](https://library-management-system-production-a2c7.up.railway.app/)
+
+Deployed on Railway with MySQL database.
 
 ## Default Login
 
